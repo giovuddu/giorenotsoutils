@@ -1,0 +1,14 @@
+[project]
+name = "giore-tests"
+version = "0"
+description = "Golden comparison tests: bin/<util> vs GNU coreutils (live)"
+requires-python = ">=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests/_fixtures"]
+addopts = "-ra"

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./src/**)",
+      "Read(./lib/**)",
+      "Edit(./src/**)",
+      "Edit(./lib/**)",
+      "Write(./src/**)",
+      "Write(./lib/**)"
+    ]
+  }
+}

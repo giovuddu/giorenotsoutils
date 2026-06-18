@@ -1,2 +1,10 @@
 DS_Store
 *.out
+bin/
+
+# tests (Python)
+.venv
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.python-version
