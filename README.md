@@ -38,7 +38,7 @@ coreutils in its entirety — without reading the original source code.
 ### Tier 0
 
 - [x] true
-- [ ] false
+- [x] false
 - [ ] yes
 - [ ] echo
 - [ ] pwd
