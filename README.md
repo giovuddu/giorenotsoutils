@@ -30,14 +30,14 @@ coreutils in its entirety — without reading the original source code.
   general concepts through any source — books, docs, articles, even AI used purely
   as a search/explainer for general theory. The line: theory and concepts are fair
   game; the actual implementation has to come out of my own head and hands.
-- I can use every form of tool assisted programming (aka _VIBECODING_ duh) to 
-  write the comparison tests aganist the original coreutil. ***Here be Python***
+- I can use every form of tool assisted programming (aka _VIBECODING_ duh) to
+  write the comparison tests aganist the original coreutil. **_Here be Python_**
 
 ## Roadmap
 
 ### Tier 0
 
-- [~] true
+- [x] true
 - [ ] false
 - [ ] yes
 - [ ] echo
