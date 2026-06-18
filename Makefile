@@ -24,3 +24,22 @@ clean:
 	rm -rf build $(BIN)
 
 .PHONY: all clean
+
+# -- tests --
+IMAGE = giore-tests:bookworm
+ARGS ?=
+RUN_OPTS = --rm \
+	-v "$(CURDIR)":/work -v /work/.venv -v /work/build -v /work/bin \
+	-w /work
+
+test-docker-build:
+	docker build -f Dockerfile.test -t $(IMAGE) .
+
+test-docker: test-docker-build
+	docker run $(RUN_OPTS) -e ARGS="$(ARGS)" $(IMAGE) \
+		sh -c 'make && uv run pytest $${ARGS:-tests/ -v}'
+
+test-docker-shell: test-docker-build
+	docker run $(RUN_OPTS) -it $(IMAGE) bash
+
+.PHONY: test-docker-build test-docker test-docker-shell

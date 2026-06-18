@@ -11,4 +11,7 @@ dev = ["pytest>=8"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["tests/_fixtures"]
-addopts = "-ra"
+addopts = "-ra --color=yes --import-mode=importlib"
+markers = [
+    "perf: wall-clock performance comparison vs GNU (informational, noisy)",
+]
