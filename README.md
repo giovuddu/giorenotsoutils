@@ -6,12 +6,12 @@ After writing the firmware for some "smart" turnstiles for my company, I found
 myself in love with the C programming language. Days after the software was
 "finished" — so, in maintenance mode — I felt the urge to write more C.
 
-I spent days trying to figure out what the "magnum opus" program I'd write could
+I spent days trying to figure out what the **magnum opus** program I'd write could
 be, but I quickly realized:
 
 - good project ideas are hard to find by actively searching for them
 - my C skill (low-level programming in general) is too low to even think about
-  writing a serious program from scratch in my free time (of which I don't have
+  writing a chunky project from scratch in my free time (of which I don't have
   a lot)
 
 So, while cruising through shell tools to learn them better, I stumbled upon
@@ -30,12 +30,14 @@ coreutils in its entirety — without reading the original source code.
   general concepts through any source — books, docs, articles, even AI used purely
   as a search/explainer for general theory. The line: theory and concepts are fair
   game; the actual implementation has to come out of my own head and hands.
+- I can use every form of tool assisted programming (aka _VIBECODING_ duh) to 
+  write the comparison tests aganist the original coreutil. ***Here be Python***
 
 ## Roadmap
 
 ### Tier 0
 
-- [ ] true
+- [~] true
 - [ ] false
 - [ ] yes
 - [ ] echo
