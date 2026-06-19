@@ -1,6 +1,7 @@
 DS_Store
 *.out
 bin/
+build/
 
 # tests (Python)
 .venv

@@ -33,16 +33,22 @@ RUN_OPTS  = -v "$(CURDIR)":/work -v /work/.venv -v /work/build -v /work/bin -w /
 test-docker-build:
 	docker build -f Dockerfile.test -t $(IMAGE) .
 
-test: test-docker-build
-	@docker start $(CONTAINER) >/dev/null 2>&1 || \
-		docker run -d --name $(CONTAINER) $(RUN_OPTS) $(IMAGE) sleep infinity >/dev/null
+POS = $(filter-out test,$(MAKECMDGOALS))
+
+test: test-up
 	@TTY=$$([ -t 1 ] && echo -t); \
-	docker exec -e ARGS="$(ARGS)" -i $$TTY $(CONTAINER) \
+	a=""; for w in $(POS); do case "$$w" in */*|-*) a="$$a $$w";; *) a="$$a tests/$$w";; esac; done; \
+	a="$${a:-$(ARGS)}"; \
+	docker exec -e ARGS="$$a" -i $$TTY $(CONTAINER) \
 		sh -c 'make && uv run pytest $${ARGS:-tests/ -v}'
 
-test-up: test-docker-build
-	@docker start $(CONTAINER) >/dev/null 2>&1 || \
-		docker run -d --name $(CONTAINER) $(RUN_OPTS) $(IMAGE) sleep infinity
+%:
+	@:
+
+test-up:
+	@docker start $(CONTAINER) >/dev/null 2>&1 || { \
+		docker image inspect $(IMAGE) >/dev/null 2>&1 || docker build -f Dockerfile.test -t $(IMAGE) .; \
+		docker run -d --name $(CONTAINER) $(RUN_OPTS) $(IMAGE) sleep infinity >/dev/null; }
 
 test-shell: test-up
 	docker exec -it $(CONTAINER) bash
