@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "version.h"
+#include "help.h"
 
 #define PROG "true"
 
@@ -16,10 +17,8 @@ void usage(char * prog) {
         "Your shell may have its own version of true, which usually supersedes\n"
         "the version described here.  Please refer to your shell's documentation\n"
         "for details about the options it supports.\n"
-        "\n"
-        "GIOVUDDU giorenotsoutils online help: <https://www.giovuddu.org/software/giorenotsoutils/>\n"
-        "Full documentation <https://www.giovuddu.org/software/giorenotsoutils/true>\n"
-        "or available locally... wait... no'\n", prog, prog);
+        HELP_FOOTER
+        , prog, prog);
 }
 
 int main(int argc, char *argv[]) {

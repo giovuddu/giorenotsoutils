@@ -25,21 +25,33 @@ clean:
 
 .PHONY: all clean
 
-# -- tests --
-IMAGE = giore-tests:bookworm
+IMAGE     = giore-tests:bookworm
+CONTAINER = giore-tests-dev
 ARGS ?=
-RUN_OPTS = --rm \
-	-v "$(CURDIR)":/work -v /work/.venv -v /work/build -v /work/bin \
-	-w /work
+RUN_OPTS  = -v "$(CURDIR)":/work -v /work/.venv -v /work/build -v /work/bin -w /work
 
 test-docker-build:
 	docker build -f Dockerfile.test -t $(IMAGE) .
 
-test-docker: test-docker-build
-	docker run $(RUN_OPTS) -e ARGS="$(ARGS)" $(IMAGE) \
+test: test-docker-build
+	@docker start $(CONTAINER) >/dev/null 2>&1 || \
+		docker run -d --name $(CONTAINER) $(RUN_OPTS) $(IMAGE) sleep infinity >/dev/null
+	@TTY=$$([ -t 1 ] && echo -t); \
+	docker exec -e ARGS="$(ARGS)" -i $$TTY $(CONTAINER) \
 		sh -c 'make && uv run pytest $${ARGS:-tests/ -v}'
 
-test-docker-shell: test-docker-build
-	docker run $(RUN_OPTS) -it $(IMAGE) bash
+test-up: test-docker-build
+	@docker start $(CONTAINER) >/dev/null 2>&1 || \
+		docker run -d --name $(CONTAINER) $(RUN_OPTS) $(IMAGE) sleep infinity
 
-.PHONY: test-docker-build test-docker test-docker-shell
+test-shell: test-up
+	docker exec -it $(CONTAINER) bash
+
+test-down:
+	-docker rm -f $(CONTAINER)
+
+test-docker: test-docker-build
+	docker run --rm $(RUN_OPTS) -e ARGS="$(ARGS)" $(IMAGE) \
+		sh -c 'make && uv run pytest $${ARGS:-tests/ -v}'
+
+.PHONY: test-docker-build test test-up test-shell test-down test-docker
