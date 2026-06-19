@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Ilib
+CFLAGS = -Wall -Wextra -Ilib -O3
 
 LIB_SRC = $(wildcard lib/*.c)
 LIB_OBJ = $(patsubst lib/%.c,build/%.o,$(LIB_SRC))

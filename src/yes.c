@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "version.h"
 #include "help.h"
@@ -61,7 +62,9 @@ int main(int argc, char *argv[]) {
         str = buf;
     }
 
+    setvbuf(stdout, NULL, _IOFBF, 64 * 1024); 
     while (1) {
-        printf("%s\n", str);
+        // printf("%s\n", str);
+        puts(str);
     }
 }
