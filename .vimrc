@@ -1,17 +1,18 @@
-syntax on
-set number relativenumber
-set autoindent
-set tabstop=4 shiftwidth=4 expandtab
-set ruler
-set clipboard=unnamedplus
+let g:loaded_matchparen=1
 
-set smartindent
+filetype plugin indent on
+syntax on
+set cindent
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set expandtab
+set autoindent
+set number
+set relativenumber
 set incsearch
 set hlsearch
-set ignorecase
-set smartcase
-set wildmenu
+set ignorecase smartcase
 set scrolloff=5
+set wildmenu
 set backspace=indent,eol,start
-set hidden
-set mouse=a
