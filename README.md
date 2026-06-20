@@ -39,7 +39,7 @@ coreutils in its entirety — without reading the original source code.
 
 - [x] true
 - [x] false
-- [ ] yes
+- [x] yes
 - [ ] echo
 - [ ] pwd
 - [ ] basename

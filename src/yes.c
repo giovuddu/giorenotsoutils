@@ -2,11 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
 
 #include "version.h"
 #include "help.h"
 
 #define PROG "yes"
+
+static struct option const long_opts[] = {
+    {"help",    no_argument, NULL, 'h'},
+    {"version", no_argument, NULL, 'v'},
+    {NULL, 0, NULL, 0}
+};
 
 void usage(char * prog) {
     printf(
@@ -29,37 +36,52 @@ void concat_args(char **args, size_t *args_lengths, int len, char *buf) {
     *(buf - 1) = '\0';
 };
 
+void *xmalloc(size_t size) {
+    void *p = malloc(size);
+    if (!p) {
+        fprintf(stderr, "%s: oom", PROG);
+        exit(EXIT_FAILURE);
+    }
+    return p;
+}
+
 int main(int argc, char *argv[]) {
     char *str = "y";
 
-    if (argc > 1) {
-        // tbd unhandled option stuff. oof
-        for (int i = 1; i < argc; i++) {
-            if (strcmp(argv[i], "--version") == 0) {
+    int c;
+    while ((c = getopt_long(argc, argv, "", long_opts, NULL)) != -1) {
+        switch (c) {
+            case 'v':
                 version(PROG);
-                return 0;
-            }
-            if (strcmp(argv[i], "--help") == 0) {
+                return EXIT_SUCCESS;
+            case 'h':
                 usage(argv[0]);
-                return 0;
-            }
+                return EXIT_SUCCESS;
+            default:
+                fprintf(stderr, "Try '%s --help' for more information.\n", argv[0]);
+                return EXIT_FAILURE;
         }
+    }
 
-        char **str_args = argv + 1;
+    int str_args_len = argc - optind;
+    if (str_args_len > 0) {
+        char **str_args = argv + optind;
         size_t buf_len = 0;
-        // heap to prevent stack overflow in case of a LOT of arguments
-        size_t *args_lengths = malloc((argc-1) * sizeof(size_t));
 
-        for (int i = 0; i < argc-1; i++) {
+        // heap to prevent stack overflow in case of a LOT of arguments
+        size_t *args_lengths = xmalloc((str_args_len) * sizeof(size_t));
+
+        for (int i = 0; i < str_args_len; i++) {
             args_lengths[i] = strlen(str_args[i]);
             buf_len += args_lengths[i];
         }
-        buf_len += argc-1;
+        buf_len += str_args_len;
 
-        char *buf = malloc(buf_len);
-        concat_args(str_args, args_lengths, argc-1, buf);
+        char *buf = xmalloc(buf_len);
+        concat_args(str_args, args_lengths, str_args_len, buf);
 
         str = buf;
+        free(args_lengths);
     }
 
     setvbuf(stdout, NULL, _IOFBF, 64 * 1024); 
