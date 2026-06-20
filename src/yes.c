@@ -39,7 +39,7 @@ void concat_args(char **args, size_t *args_lengths, int len, char *buf) {
 void *xmalloc(size_t size) {
     void *p = malloc(size);
     if (!p) {
-        fprintf(stderr, "%s: oom", PROG);
+        fprintf(stderr, "%s: oom\n", PROG);
         exit(EXIT_FAILURE);
     }
     return p;
