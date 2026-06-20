@@ -1,6 +1,6 @@
 # GIORE (not so) UTILS
 
-This is a learning project.
+**_This is a learning project._**
 
 After writing the firmware for some "smart" turnstiles for my company, I found
 myself in love with the C programming language. Days after the software was
@@ -93,3 +93,8 @@ coreutils in its entirety — without reading the original source code.
 - [ ] du
 - [ ] df
 - [ ] ls
+
+## notes
+
+The roadmap is AI-generated. I can't judge implementation difficulty
+up front, and I don't want to waste time agonizing over the ordering.
