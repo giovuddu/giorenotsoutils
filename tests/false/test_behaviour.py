@@ -1,11 +1,15 @@
 import pytest
 
-from harness import ReferenceMissing, measure_case, reference_path
+from harness import (
+    ReferenceMissing,
+    assert_match,
+    assert_signature_match,
+    reference_path,
+)
 
-UTIL = "true"
+UTIL = "false"
 
-# Same invocation shapes as the behavioural suite: here we time startup + arg
-# parsing on each form (true/false ignore operands, so this is startup cost).
+# true/false: operands are ignored; same arg handling for both.
 ARG_CASES: list[tuple[str, list[str]]] = [
     ("no-args", []),
     ("single-operand", ["foo"]),
@@ -32,6 +36,22 @@ ARG_CASES: list[tuple[str, list[str]]] = [
     ("many-operands", ["x"] * 1000),
 ]
 
+# banner cases: content is ours by design -> compare signature, not bytes
+SIGNATURE_CASE_IDS: frozenset[str] = frozenset({
+    "help",
+    "version",
+    "help-then-version",
+    "version-then-help",
+})
+
+STDIN_CASES: list[tuple[str, bytes]] = [
+    ("empty-stdin", b""),
+    ("text-stdin", b"hello\nworld\n"),
+    ("binary-stdin", bytes(range(256))),
+    ("large-stdin", b"A" * (1 << 20)),
+    ("no-trailing-newline", b"partial"),
+]
+
 
 @pytest.fixture(scope="module", autouse=True)
 def _require_reference():
@@ -41,8 +61,14 @@ def _require_reference():
         pytest.skip(str(e))
 
 
-@pytest.mark.perf
 @pytest.mark.parametrize("case_id,args", ARG_CASES, ids=[i for i, _ in ARG_CASES])
-def test_perf(case_id, args):
-    row = measure_case(UTIL, args, case_id=case_id)
-    assert row["bin_ms"] >= 0
+def test_args(case_id, args):
+    if case_id in SIGNATURE_CASE_IDS:
+        assert_signature_match(UTIL, args)
+    else:
+        assert_match(UTIL, args)
+
+
+@pytest.mark.parametrize("stdin", [s for _, s in STDIN_CASES], ids=[i for i, _ in STDIN_CASES])
+def test_stdin(stdin):
+    assert_match(UTIL, [], stdin)

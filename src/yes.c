@@ -68,7 +68,6 @@ int main(int argc, char *argv[]) {
         char **str_args = argv + optind;
         size_t buf_len = 0;
 
-        // heap to prevent stack overflow in case of a LOT of arguments
         size_t *args_lengths = xmalloc((str_args_len) * sizeof(size_t));
 
         for (int i = 0; i < str_args_len; i++) {
@@ -86,7 +85,6 @@ int main(int argc, char *argv[]) {
 
     setvbuf(stdout, NULL, _IOFBF, 64 * 1024); 
     while (1) {
-        // printf("%s\n", str);
         puts(str);
     }
 }

@@ -1,6 +1,6 @@
 import pytest
 
-from giore_golden import ReferenceMissing, measure_throughput, reference_path
+from harness import ReferenceMissing, measure_throughput, reference_path
 
 UTIL = "yes"
 

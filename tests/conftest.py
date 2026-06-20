@@ -1,4 +1,4 @@
-from giore_golden import PERF_RESULTS, THROUGHPUT_RESULTS
+from harness import PERF_RESULTS, THROUGHPUT_RESULTS
 
 
 def _perf_table(tr):

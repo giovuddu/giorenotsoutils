@@ -271,72 +271,6 @@ def assert_stream_signature(
         )
 
 
-# true/false: operands are ignored; same arg handling for both
-ARG_CASES: list[tuple[str, list[str]]] = [
-    ("no-args", []),
-    ("single-operand", ["foo"]),
-    ("multi-operand", ["foo", "bar", "baz"]),
-    ("empty-operand", [""]),
-    ("dash-operand", ["-"]),
-    ("double-dash", ["--"]),
-    ("double-dash-then-flag", ["--", "--help"]),
-    ("help", ["--help"]),
-    ("version", ["--version"]),
-    ("help-then-version", ["--help", "--version"]),
-    ("version-then-help", ["--version", "--help"]),
-    ("operand-then-help", ["foo", "--help"]),
-    ("help-abbrev", ["--hel"]),
-    ("help-shortest-abbrev", ["--h"]),
-    ("version-abbrev", ["--vers"]),
-    ("help-with-arg", ["--help=foo"]),
-    ("unknown-long", ["--nonexistent"]),
-    ("unknown-short", ["-z"]),
-    ("bundled-short", ["-abc"]),
-    ("newline-operand", ["\n"]),
-    ("special-chars", ["a b\tc", "x\ny"]),
-    ("unicode", ["café", "日本語", "🚀"]),
-    ("many-operands", ["x"] * 1000),
-]
-
-# banner cases: content is ours by design -> signature, not bytes
-SIGNATURE_CASE_IDS: frozenset[str] = frozenset({
-    "help",
-    "version",
-    "help-then-version",
-    "version-then-help",
-})
-
-
-# yes: operands ARE the output, streamed forever (space-joined + '\n')
-YES_ARG_CASES: list[tuple[str, list[str]]] = [
-    ("default", []),
-    ("single-word", ["hello"]),
-    ("multi-word", ["a", "b", "c"]),
-    ("empty-string", [""]),
-    ("dash-operand", ["-"]),
-    ("double-dash-operand", ["--", "--help"]),
-    ("special-chars", ["a\tb", "c d"]),
-    ("unicode", ["café", "🚀"]),
-    ("newline-operand", ["a\nb"]),
-    ("many-words", ["w"] * 100),
-    ("unknown-long", ["--bogus"]),
-    ("unknown-short", ["-z"]),
-    ("help", ["--help"]),
-    ("version", ["--version"]),
-    ("operand-then-help", ["foo", "--help"]),   # GNU permutes options -> help
-    ("help-then-version", ["--help", "--version"]),
-    ("version-then-help", ["--version", "--help"]),
-]
-
-YES_SIGNATURE_CASE_IDS: frozenset[str] = frozenset({
-    "help",
-    "version",
-    "operand-then-help",
-    "help-then-version",
-    "version-then-help",
-})
-
-
 PERF_RESULTS: list[dict] = []
 PERF_REPEATS = 15
 PERF_WARMUP = 3
@@ -460,12 +394,3 @@ def measure_throughput(
     }
     THROUGHPUT_RESULTS.append(row)
     return row
-
-
-STDIN_CASES: list[tuple[str, bytes]] = [
-    ("empty-stdin", b""),
-    ("text-stdin", b"hello\nworld\n"),
-    ("binary-stdin", bytes(range(256))),
-    ("large-stdin", b"A" * (1 << 20)),
-    ("no-trailing-newline", b"partial"),
-]
